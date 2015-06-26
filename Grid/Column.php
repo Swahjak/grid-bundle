@@ -23,6 +23,11 @@ class Column
     protected $index;
 
     /**
+     * @var array
+     */
+    protected $params = array();
+
+    /**
      * @var string
      */
     protected $twig;
@@ -134,6 +139,30 @@ class Column
     public function getIndex()
     {
         return $this->index;
+    }
+
+    /**
+     * @param array $params
+     * @return Column
+     */
+    public function setParams(array $params) {
+
+        $this->params = $params;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams() {
+
+        return $this->params;
+    }
+
+    public function getParam($key, $default = null) {
+
+        return isset($this->params[$key]) ? $this->params[$key] : $default;
     }
 
     /**
