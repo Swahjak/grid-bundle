@@ -5,69 +5,69 @@
             <table class="table table-hover table-bordered pedroteixeira-grid-table" id="{{ view.grid.name | raw }}-pedroteixeira-grid-table">
                 <colgroup>
                     {% for column in view.grid.columns %}
-                        <col{% if column.getParam('width') %} {{ column.getParam('index') }}{% endif %} />
+                        <col{% if column.hasAttribute('col', 'width') %} width="{{ column.getAttribute('col', 'width') }}"{% endif %} />
                     {% endfor %}
                 </colgroup>
                 <thead>
-                    <tr id="row-filters-label">
-                        {% for column in view.grid.columns %}
-                            {%  if column.exportOnly == false %}
-                                <th id="{{ column.field }}" {% if column.sortable %}data-index="{{ column.index }}"{% endif %}>{{ column.name }}</th>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                    <tr class="row-filters">
-                        {% for column in view.grid.columns %}
-                            {% if column.exportOnly == false %}
-                                <th>{{ column.renderFilter | raw }}</th>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
+                <tr id="row-filters-label">
+                    {% for column in view.grid.columns %}
+                        {%  if column.exportOnly == false %}
+                            <th id="{{ column.field }}" {% if column.sortable %}data-index="{{ column.index }}"{% endif %}>{{ column.name }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class="row-filters">
+                    {% for column in view.grid.columns %}
+                        {% if column.exportOnly == false %}
+                            <th>{{ column.renderFilter | raw }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
                 </thead>
                 <tbody class="table-condensed row-result"></tbody>
                 <tbody class="row-empty">
-                    <tr>
-                        <td colspan="{{ view.grid.getColumnsCount }}">{% trans %}There is no rows.{% endtrans %}</td>
-                    </tr>
+                <tr>
+                    <td colspan="{{ view.grid.getColumnsCount }}">{% trans %}There are no rows.{% endtrans %}</td>
+                </tr>
                 </tbody>
                 <tfoot>
-                    <tr class="row-footer">
-                        <td colspan="{{ view.grid.getColumnsCount }}">
-                            {# Without submit button the form is not submitted with the enter key #}
-                            <button id="refresh-button" class="btn btn-default btn-xs" type="submit">
-                                <i class="glyphicon glyphicon-refresh"></i> {% trans %}Update{% endtrans %}
+                <tr class="row-footer">
+                    <td colspan="{{ view.grid.getColumnsCount }}">
+                        {# Without submit button the form is not submitted with the enter key #}
+                        <button id="refresh-button" class="btn btn-default btn-xs" type="submit">
+                            <i class="glyphicon glyphicon-refresh"></i> {% trans %}Update{% endtrans %}
+                        </button>
+
+                        <button id="refresh-filters-button" class="btn btn-default btn-xs" type="button">
+                            <i class="glyphicon glyphicon-filter"></i> {% trans %}Refresh Filters{% endtrans %}
+                        </button>
+
+                        {% if view.grid.exportable %}
+                            <button id="export-button" class="btn btn-default btn-xs" type="button">
+                                <i class="glyphicon glyphicon-download"></i> {% trans %}Export{% endtrans %}
+                            </button>
+                        {% endif %}
+
+                        <div id="pagination" class="pull-right">
+                            <button id="pagination-back-button" class="btn btn-default btn-xs" type="button">
+                                <i class="glyphicon glyphicon-chevron-left"></i>
+                            </button>
+                            <input id="pagination-page" type="text" value="0">
+                            <button id="pagination-forward-button" class="btn btn-default btn-xs" type="button">
+                                <i class="glyphicon glyphicon-chevron-right"></i>
                             </button>
 
-                            <button id="refresh-filters-button" class="btn btn-default btn-xs" type="button">
-                                <i class="glyphicon glyphicon-filter"></i> {% trans %}Refresh Filters{% endtrans %}
-                            </button>
-
-                            {% if view.grid.exportable %}
-                                <button id="export-button" class="btn btn-default btn-xs" type="button">
-                                    <i class="glyphicon glyphicon-download"></i> {% trans %}Export{% endtrans %}
-                                </button>
-                            {% endif %}
-
-                            <div id="pagination" class="pull-right">
-                                <button id="pagination-back-button" class="btn btn-default btn-xs" type="button">
-                                    <i class="glyphicon glyphicon-chevron-left"></i>
-                                </button>
-                                <input id="pagination-page" type="text" value="0">
-                                <button id="pagination-forward-button" class="btn btn-default btn-xs" type="button">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>
-                                </button>
-
-                                {% trans %}of{% endtrans %}
-                                <span id="pagination-total-pages">0</span>
-                                {% trans %}page(s) with{% endtrans %}
-                                <span id="pagination-total">0</span>
-                                {% trans %}result(s){% endtrans %}.
-                                {% trans %}Showing{% endtrans %}
-                                <input id="pagination-limit" type="text" value="0">
-                                {% trans %}result(s) per page{% endtrans %}.
-                            </div>
-                        </td>
-                    </tr>
+                            {% trans %}of{% endtrans %}
+                            <span id="pagination-total-pages">0</span>
+                            {% trans %}page(s) with{% endtrans %}
+                            <span id="pagination-total">0</span>
+                            {% trans %}result(s){% endtrans %}.
+                            {% trans %}Showing{% endtrans %}
+                            <input id="pagination-limit" type="text" value="0">
+                            {% trans %}result(s) per page{% endtrans %}.
+                        </div>
+                    </td>
+                </tr>
                 </tfoot>
             </table>
         </form>

@@ -2,6 +2,8 @@
 
 namespace PedroTeixeira\Bundle\GridBundle\Grid;
 
+use Doctrine\DBAL\Driver\AbstractDriverException;
+
 /**
  * Grid Column
  */
@@ -25,7 +27,12 @@ class Column
     /**
      * @var array
      */
-    protected $params = array();
+    protected $attributes = array(
+        'col' => array(),
+        'heading' => array(),
+        'row' => array(),
+        'cell' => array()
+    );
 
     /**
      * @var string
@@ -142,27 +149,65 @@ class Column
     }
 
     /**
-     * @param array $params
+     * @param array $attributes
      * @return Column
+     * @throws \Exception
      */
-    public function setParams(array $params) {
+    public function setAttributes($attributes) {
 
-        $this->params = $params;
+        if(!is_array($attributes)) {
+
+            throw new \Exception('Expected param $attributes to be array.');
+        }
+        
+        foreach($attributes as $type => $value) {
+            
+            if(!isset($this->attributes[$type])) {
+                
+                throw new \Exception(sprintf('Invalid parameters. Only parameters for %s are allowed', implode(", ", array_keys($this->attributes))));
+            }
+
+            if(!is_array($attributes)) {
+
+                throw new \Exception(sprintf('Expected attributes for %s to be array.', $type));
+            }
+            
+            $this->attributes[$type] = $value;
+        }
+
+        $this->attributes = array_merge($attributes, $this->attributes);
 
         return $this;
     }
 
     /**
+     * @param string $type
      * @return array
      */
-    public function getParams() {
+    public function getAttributes($type = null) {
 
-        return $this->params;
+        return $type === null || !isset($this->attributes[$type]) ? $this->attributes : $this->attributes[$type];
     }
 
-    public function getParam($key, $default = null) {
+    /**
+     * @param string $type
+     * @param string $key
+     * @param null $default
+     * @return null
+     */
+    public function getAttribute($type, $key, $default = null) {
 
-        return isset($this->params[$key]) ? $this->params[$key] : $default;
+        return isset($this->attributes[$type][$key]) ? $this->attributes[$type][$key] : $default;
+    }
+
+    /**
+     * @param string $type
+     * @param string $key
+     * @return bool
+     */
+    public function hasAttribute($type, $key) {
+
+        return isset($this->attributes[$type][$key]);
     }
 
     /**

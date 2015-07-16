@@ -70,12 +70,14 @@
                         emptyTbody.hide()
                         $.each(data.rows, function (i, item) {
                             html += '<tr>'
-                            $.each(item, function (i, value) {
-                                if (value == null) {
-                                    value = ''
+                            $.each(item, function (i, col) {
+                                if (col.v == null) {
+                                    col.v = ''
                                 }
 
-                                html += '<td>' + value + '</td>'
+                                html += '<td';
+                                html += col.p.class == undefined ? '' : ' class="' + col.p.class + '"';
+                                html += '>' + col.v + '</td>'
                             })
                             html += '</tr>'
                         })

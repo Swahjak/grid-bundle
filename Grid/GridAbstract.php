@@ -397,10 +397,22 @@ abstract class GridAbstract
                     );
                 }
 
-                $rowValue[$column->getField()] = $column->getRender()
+                $value =  $column->getRender()
                     ->setValue($rowColumn)
                     ->setStringOnly($this->isExport())
                     ->render();
+
+                $attributes = '';
+
+                foreach($column->getAttributes('cell') as $attribute => $value) {
+
+                    $attributes .= sprintf(' %s="%s"', $attribute, $value);
+                }
+
+                $rowValue[$column->getField()] = array(
+                    'value' => $value,
+                    'attributes' => $attributes
+                );
             }
 
             $response['rows'][$key] = $rowValue;
