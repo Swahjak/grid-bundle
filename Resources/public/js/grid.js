@@ -71,13 +71,12 @@
                         $.each(data.rows, function (i, item) {
                             html += '<tr>'
                             $.each(item, function (i, col) {
-                                if (col.v == null) {
-                                    col.v = ''
+
+                                if (col.val == null) {
+                                    col.val = ''
                                 }
 
-                                html += '<td';
-                                html += col.p.class == undefined ? '' : ' class="' + col.p.class + '"';
-                                html += '>' + col.v + '</td>'
+                                html += '<td' + col.attr + '>' + col.val + '</td>';
                             })
                             html += '</tr>'
                         })
@@ -161,7 +160,7 @@
         , processOrder:function (event) {
 
             var element = $(event.target)
-                sortIndex = element.data('index')
+            sortIndex = element.data('index')
 
             if (!sortIndex) {
                 return false

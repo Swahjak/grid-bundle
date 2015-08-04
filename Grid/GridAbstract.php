@@ -369,24 +369,24 @@ abstract class GridAbstract
 
                     $rowColumn = $row[$column->getField()];
 
-                // Array scalar
+                    // Array scalar
                 } elseif (array_key_exists(0, $row) && array_key_exists($column->getField(), $row[0])) {
 
                     $rowColumn = $row[0][$column->getField()];
 
-                // Object
+                    // Object
                 } elseif (method_exists($row, 'get' . ucfirst($column->getField()))) {
 
                     $method = 'get' . ucfirst($column->getField());
                     $rowColumn = $row->$method();
 
-                // Object scalar
+                    // Object scalar
                 } elseif (array_key_exists(0, $row) && method_exists($row[0], 'get' . ucfirst($column->getField()))) {
 
                     $method = 'get' . ucfirst($column->getField());
                     $rowColumn = $row[0]->$method();
 
-                // Array
+                    // Array
                 } elseif ($column->getTwig()) {
 
                     $rowColumn = $this->templating->render(
@@ -397,7 +397,7 @@ abstract class GridAbstract
                     );
                 }
 
-                $value =  $column->getRender()
+                $colVal =  $column->getRender()
                     ->setValue($rowColumn)
                     ->setStringOnly($this->isExport())
                     ->render();
@@ -410,8 +410,8 @@ abstract class GridAbstract
                 }
 
                 $rowValue[$column->getField()] = array(
-                    'value' => $value,
-                    'attributes' => $attributes
+                    'val' => $colVal,
+                    'attr' => $attributes
                 );
             }
 
