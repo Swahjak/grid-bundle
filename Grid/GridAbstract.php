@@ -508,4 +508,11 @@ abstract class GridAbstract
             }
         }
     }
+
+    public function renderHtml() {
+
+        $this->ajax = false;
+
+        return $this->render();
+    }
 }
