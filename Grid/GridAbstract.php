@@ -35,6 +35,11 @@ abstract class GridAbstract
     protected $queryBuilder;
 
     /**
+     * var \Doctrine\ORM\QueryBuilder;
+     */
+    protected $countQueryBuilder;
+
+    /**
      * @var \Twig_TemplateInterface
      */
     protected $templating;
@@ -225,6 +230,25 @@ abstract class GridAbstract
     }
 
     /**
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @return $this
+     */
+    public function setCountQueryBuilder(QueryBuilder $queryBuilder) {
+
+        $this->countQueryBuilder = $queryBuilder;
+
+        return $this;
+    }
+
+    /**
+     * @return null|\Doctrine\ORM\QueryBuilder
+     */
+    public function getCountQueryBuilder() {
+
+        return $this->countQueryBuilder;
+    }
+
+    /**
      * @param string $name
      *
      * @return Column
@@ -325,7 +349,15 @@ abstract class GridAbstract
 
         // Don't process grid for export
         if (!$this->isExport()) {
-            $totalCount = count(new Paginator($this->getQueryBuilder()->getQuery()));
+
+            if($this->getCountQueryBuilder() !== null) {
+
+                $totalCount = $this->getCountQueryBuilder()->getQuery()->getSingleScalarResult();
+            }
+            else {
+
+                $totalCount = count(new Paginator($this->getQueryBuilder()->getQuery()));
+            }
 
             $totalPages = ceil($totalCount / $limit);
             $totalPages = ($totalPages <= 0 ? 1 : $totalPages);
