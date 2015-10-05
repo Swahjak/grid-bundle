@@ -264,7 +264,7 @@ abstract class GridAbstract
     protected function getExportFileName()
     {
         $exportPath = $this->container->getParameter('pedro_teixeira_grid.export.path');
-        $exportFile = $exportPath . $this->getName() . '_' . $this->fileHash . '.csv';
+        $exportFile = $exportPath.$this->getName().'_'.$this->fileHash.'.csv';
 
         return $exportFile;
     }
@@ -278,11 +278,11 @@ abstract class GridAbstract
     {
         $defaultLimit = $this->container->getParameter('pedro_teixeira_grid.pagination.limit');
 
-        $page       = $this->request->query->get('page', 1);
-        $limit      = $this->request->query->get('limit', $defaultLimit);
-        $sortIndex  = $this->request->query->get('sort');
-        $sortOrder  = $this->request->query->get('sort_order');
-        $filters    = $this->request->query->get('filters', array());
+        $page = $this->request->query->get('page', 1);
+        $limit = $this->request->query->get('limit', $defaultLimit);
+        $sortIndex = $this->request->query->get('sort');
+        $sortOrder = $this->request->query->get('sort_order');
+        $filters = $this->request->query->get('filters', array());
 
         $page = intval(abs($page));
         $page = ($page <= 0 ? 1 : $page);
@@ -301,8 +301,8 @@ abstract class GridAbstract
 
                 if (!isset($filters[$name])) {
                     $filters[$name] = array(
-                        'name' => $name,
-                        'value' => array($filter['value'])
+                        'name'  => $name,
+                        'value' => array($filter['value']),
                     );
                 } else {
                     $filters[$name]['value'][] = $filter['value'];
@@ -343,11 +343,11 @@ abstract class GridAbstract
                 'page_count' => $totalPages,
                 'page_limit' => $limit,
                 'row_count'  => $totalCount,
-                'rows'       => array()
+                'rows'       => array(),
             );
         } else {
             $response = array(
-                'rows'       => array()
+                'rows' => array(),
             );
         }
 
@@ -369,30 +369,30 @@ abstract class GridAbstract
 
                     $rowColumn = $row[$column->getField()];
 
-                // Array scalar
+                    // Array scalar
                 } elseif (array_key_exists(0, $row) && array_key_exists($column->getField(), $row[0])) {
 
                     $rowColumn = $row[0][$column->getField()];
 
-                // Object
-                } elseif (method_exists($row, 'get' . ucfirst($column->getField()))) {
+                    // Object
+                } elseif (method_exists($row, 'get'.ucfirst($column->getField()))) {
 
-                    $method = 'get' . ucfirst($column->getField());
+                    $method = 'get'.ucfirst($column->getField());
                     $rowColumn = $row->$method();
 
-                // Object scalar
-                } elseif (array_key_exists(0, $row) && method_exists($row[0], 'get' . ucfirst($column->getField()))) {
+                    // Object scalar
+                } elseif (array_key_exists(0, $row) && method_exists($row[0], 'get'.ucfirst($column->getField()))) {
 
-                    $method = 'get' . ucfirst($column->getField());
+                    $method = 'get'.ucfirst($column->getField());
                     $rowColumn = $row[0]->$method();
 
-                // Array
+                    // Array
                 } elseif ($column->getTwig()) {
 
                     $rowColumn = $this->templating->render(
                         $column->getTwig(),
                         array(
-                            'row' => $row
+                            'row' => $row,
                         )
                     );
                 }
@@ -457,7 +457,7 @@ abstract class GridAbstract
         fclose($fileHandler);
 
         return array(
-            'file_hash' => $this->fileHash
+            'file_hash' => $this->fileHash,
         );
     }
 
@@ -499,7 +499,7 @@ abstract class GridAbstract
 
                 $response = new Response();
                 $response->headers->set('Content-Type', 'text/csv');
-                $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($exportFile) . '"');
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.basename($exportFile).'"');
                 $response->setContent(file_get_contents($exportFile));
 
                 return $response;
@@ -509,7 +509,12 @@ abstract class GridAbstract
         }
     }
 
-    public function renderHtml() {
+    /**
+     * @return GridView | \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
+    public function renderHtml()
+    {
 
         $this->ajax = false;
 
